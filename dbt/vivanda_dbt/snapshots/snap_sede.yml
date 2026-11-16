@@ -1,0 +1,13 @@
+snapshots:
+  - name: snap_sede
+    relation: ref('dim_sede')
+    config:
+      unique_key: ID_SEDE
+      strategy: check
+      check_cols:
+        - CODIGO
+        - NOMBRE
+        - DEPARTAMENTO
+        - PROVINCIA
+        - DISTRITO
+        - ACTIVO

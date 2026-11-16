@@ -1,0 +1,157 @@
+﻿ANIO,MES_NUMERO,MES,ID_SEDE,ID_METODO_PAGO,METODO_PAGO,NUMERO_PAGOS,NUMERO_VENTAS,TOTAL_PAGADO
+2025,11,Nov,1,2,Tarjeta de débito,496,496,11160.0
+2025,11,Nov,1,1,Efectivo,507,507,9977.76
+2025,11,Nov,1,3,Tarjeta de crédito,472,472,9406.96
+2025,11,Nov,1,4,Billetera digital,487,487,8873.14
+2025,11,Nov,2,4,Billetera digital,521,521,12748.87
+2025,11,Nov,2,2,Tarjeta de débito,529,529,10103.9
+2025,11,Nov,2,3,Tarjeta de crédito,488,488,9442.8
+2025,11,Nov,2,1,Efectivo,535,535,9314.35
+2025,11,Nov,3,1,Efectivo,494,494,13100.88
+2025,11,Nov,3,3,Tarjeta de crédito,479,479,10389.51
+2025,11,Nov,3,4,Billetera digital,504,504,8568.0
+2025,11,Nov,3,2,Tarjeta de débito,504,504,7620.48
+2025,12,Dec,1,2,Tarjeta de débito,685,685,15412.5
+2025,12,Dec,1,3,Tarjeta de crédito,718,718,14309.74
+2025,12,Dec,1,1,Efectivo,686,686,13500.48
+2025,12,Dec,1,4,Billetera digital,690,690,12571.8
+2025,12,Dec,2,4,Billetera digital,740,740,18107.8
+2025,12,Dec,2,2,Tarjeta de débito,725,725,13847.5
+2025,12,Dec,2,3,Tarjeta de crédito,703,703,13603.05
+2025,12,Dec,2,1,Efectivo,715,715,12448.15
+2025,12,Dec,3,1,Efectivo,755,755,20022.6
+2025,12,Dec,3,3,Tarjeta de crédito,749,749,16245.81
+2025,12,Dec,3,4,Billetera digital,720,720,12240.0
+2025,12,Dec,3,2,Tarjeta de débito,668,668,10100.16
+2026,1,Jan,1,2,Tarjeta de débito,733,733,16492.5
+2026,1,Jan,1,3,Tarjeta de crédito,699,699,13931.07
+2026,1,Jan,1,1,Efectivo,707,707,13913.76
+2026,1,Jan,1,4,Billetera digital,723,723,13173.06
+2026,1,Jan,2,4,Billetera digital,644,644,15758.68
+2026,1,Jan,2,3,Tarjeta de crédito,723,723,13990.05
+2026,1,Jan,2,2,Tarjeta de débito,717,717,13694.7
+2026,1,Jan,2,1,Efectivo,702,702,12221.82
+2026,1,Jan,3,1,Efectivo,688,688,18245.76
+2026,1,Jan,3,3,Tarjeta de crédito,740,740,16050.6
+2026,1,Jan,3,4,Billetera digital,708,708,12036.0
+2026,1,Jan,3,2,Tarjeta de débito,765,765,11566.8
+2026,2,Feb,1,2,Tarjeta de débito,644,644,14490.0
+2026,2,Feb,1,1,Efectivo,658,658,12949.44
+2026,2,Feb,1,3,Tarjeta de crédito,624,624,12436.32
+2026,2,Feb,1,4,Billetera digital,667,667,12152.74
+2026,2,Feb,2,4,Billetera digital,674,674,16492.78
+2026,2,Feb,2,3,Tarjeta de crédito,685,685,13254.75
+2026,2,Feb,2,2,Tarjeta de débito,629,629,12013.9
+2026,2,Feb,2,1,Efectivo,642,642,11177.22
+2026,2,Feb,3,1,Efectivo,588,588,15593.76
+2026,2,Feb,3,3,Tarjeta de crédito,595,595,12905.55
+2026,2,Feb,3,4,Billetera digital,686,686,11662.0
+2026,2,Feb,3,2,Tarjeta de débito,626,626,9465.12
+2026,3,Mar,1,2,Tarjeta de débito,692,692,15570.0
+2026,3,Mar,1,1,Efectivo,729,729,14346.72
+2026,3,Mar,1,3,Tarjeta de crédito,710,710,14150.3
+2026,3,Mar,1,4,Billetera digital,721,721,13136.62
+2026,3,Mar,2,4,Billetera digital,716,716,17520.52
+2026,3,Mar,2,3,Tarjeta de crédito,715,715,13835.25
+2026,3,Mar,2,2,Tarjeta de débito,715,715,13656.5
+2026,3,Mar,2,1,Efectivo,680,680,11838.8
+2026,3,Mar,3,1,Efectivo,715,715,18961.8
+2026,3,Mar,3,3,Tarjeta de crédito,742,742,16093.98
+2026,3,Mar,3,4,Billetera digital,662,662,11254.0
+2026,3,Mar,3,2,Tarjeta de débito,660,660,9979.2
+2026,4,Apr,1,2,Tarjeta de débito,660,660,14850.0
+2026,4,Apr,1,1,Efectivo,702,702,13815.36
+2026,4,Apr,1,3,Tarjeta de crédito,693,693,13811.49
+2026,4,Apr,1,4,Billetera digital,699,699,12735.78
+2026,4,Apr,2,4,Billetera digital,650,650,15905.5
+2026,4,Apr,2,3,Tarjeta de crédito,697,697,13486.95
+2026,4,Apr,2,2,Tarjeta de débito,696,696,13293.6
+2026,4,Apr,2,1,Efectivo,690,690,12012.9
+2026,4,Apr,3,1,Efectivo,692,692,18351.84
+2026,4,Apr,3,3,Tarjeta de crédito,728,728,15790.32
+2026,4,Apr,3,4,Billetera digital,762,762,12954.0
+2026,4,Apr,3,2,Tarjeta de débito,638,638,9646.56
+2026,5,May,1,2,Tarjeta de débito,700,700,15750.0
+2026,5,May,1,3,Tarjeta de crédito,705,705,14050.65
+2026,5,May,1,1,Efectivo,703,703,13835.04
+2026,5,May,1,4,Billetera digital,717,717,13063.74
+2026,5,May,2,4,Billetera digital,737,737,18034.39
+2026,5,May,2,3,Tarjeta de crédito,693,693,13409.55
+2026,5,May,2,2,Tarjeta de débito,686,686,13102.6
+2026,5,May,2,1,Efectivo,709,709,12343.69
+2026,5,May,3,1,Efectivo,665,665,17635.8
+2026,5,May,3,3,Tarjeta de crédito,713,713,15464.97
+2026,5,May,3,4,Billetera digital,685,685,11645.0
+2026,5,May,3,2,Tarjeta de débito,704,704,10644.48
+2026,6,Jun,1,2,Tarjeta de débito,700,700,15750.0
+2026,6,Jun,1,1,Efectivo,706,706,13894.08
+2026,6,Jun,1,3,Tarjeta de crédito,693,693,13811.49
+2026,6,Jun,1,4,Billetera digital,662,662,12061.64
+2026,6,Jun,2,4,Billetera digital,699,699,17104.53
+2026,6,Jun,2,3,Tarjeta de crédito,698,698,13506.3
+2026,6,Jun,2,2,Tarjeta de débito,672,672,12835.2
+2026,6,Jun,2,1,Efectivo,688,688,11978.08
+2026,6,Jun,3,1,Efectivo,697,697,18484.44
+2026,6,Jun,3,3,Tarjeta de crédito,690,690,14966.1
+2026,6,Jun,3,4,Billetera digital,689,689,11713.0
+2026,6,Jun,3,2,Tarjeta de débito,706,706,10674.72
+2026,7,Jul,1,2,Tarjeta de débito,681,681,15322.5
+2026,7,Jul,1,3,Tarjeta de crédito,691,691,13771.63
+2026,7,Jul,1,1,Efectivo,684,684,13461.12
+2026,7,Jul,1,4,Billetera digital,672,672,12243.84
+2026,7,Jul,2,4,Billetera digital,700,700,17129.0
+2026,7,Jul,2,2,Tarjeta de débito,736,736,14057.6
+2026,7,Jul,2,3,Tarjeta de crédito,686,686,13274.1
+2026,7,Jul,2,1,Efectivo,656,656,11420.96
+2026,7,Jul,3,1,Efectivo,725,725,19227.0
+2026,7,Jul,3,3,Tarjeta de crédito,684,684,14835.96
+2026,7,Jul,3,4,Billetera digital,710,710,12070.0
+2026,7,Jul,3,2,Tarjeta de débito,724,724,10946.88
+2026,8,Aug,1,2,Tarjeta de débito,684,684,15390.0
+2026,8,Aug,1,3,Tarjeta de crédito,745,745,14847.85
+2026,8,Aug,1,1,Efectivo,691,691,13598.88
+2026,8,Aug,1,4,Billetera digital,710,710,12936.2
+2026,8,Aug,2,4,Billetera digital,702,702,17177.94
+2026,8,Aug,2,2,Tarjeta de débito,747,747,14267.7
+2026,8,Aug,2,3,Tarjeta de crédito,692,692,13390.2
+2026,8,Aug,2,1,Efectivo,751,751,13074.91
+2026,8,Aug,3,1,Efectivo,715,715,18961.8
+2026,8,Aug,3,3,Tarjeta de crédito,691,691,14987.79
+2026,8,Aug,3,4,Billetera digital,680,680,11560.0
+2026,8,Aug,3,2,Tarjeta de débito,735,735,11113.2
+2026,9,Sep,1,2,Tarjeta de débito,760,760,17100.0
+2026,9,Sep,1,3,Tarjeta de crédito,721,721,14369.53
+2026,9,Sep,1,4,Billetera digital,724,724,13191.28
+2026,9,Sep,1,1,Efectivo,664,664,13067.52
+2026,9,Sep,2,4,Billetera digital,698,698,17080.06
+2026,9,Sep,2,3,Tarjeta de crédito,683,683,13216.05
+2026,9,Sep,2,2,Tarjeta de débito,629,629,12013.9
+2026,9,Sep,2,1,Efectivo,651,651,11333.91
+2026,9,Sep,3,1,Efectivo,699,699,18537.48
+2026,9,Sep,3,3,Tarjeta de crédito,618,618,13404.42
+2026,9,Sep,3,4,Billetera digital,687,687,11679.0
+2026,9,Sep,3,2,Tarjeta de débito,689,689,10417.68
+2026,10,Oct,1,2,Tarjeta de débito,715,715,16087.5
+2026,10,Oct,1,1,Efectivo,738,738,14523.84
+2026,10,Oct,1,3,Tarjeta de crédito,682,682,13592.26
+2026,10,Oct,1,4,Billetera digital,680,680,12389.6
+2026,10,Oct,2,4,Billetera digital,702,702,17177.94
+2026,10,Oct,2,3,Tarjeta de crédito,706,706,13661.1
+2026,10,Oct,2,2,Tarjeta de débito,683,683,13045.3
+2026,10,Oct,2,1,Efectivo,709,709,12343.69
+2026,10,Oct,3,1,Efectivo,718,718,19041.36
+2026,10,Oct,3,3,Tarjeta de crédito,723,723,15681.87
+2026,10,Oct,3,2,Tarjeta de débito,740,740,11188.8
+2026,10,Oct,3,4,Billetera digital,651,651,11067.0
+2026,11,Nov,1,2,Tarjeta de débito,183,183,4117.5
+2026,11,Nov,1,3,Tarjeta de crédito,180,180,3587.4
+2026,11,Nov,1,4,Billetera digital,182,182,3316.04
+2026,11,Nov,1,1,Efectivo,159,159,3129.12
+2026,11,Nov,2,4,Billetera digital,150,150,3670.5
+2026,11,Nov,2,1,Efectivo,205,205,3569.05
+2026,11,Nov,2,2,Tarjeta de débito,170,170,3247.0
+2026,11,Nov,2,3,Tarjeta de crédito,164,164,3173.4
+2026,11,Nov,3,1,Efectivo,182,182,4826.64
+2026,11,Nov,3,3,Tarjeta de crédito,182,182,3947.58
+2026,11,Nov,3,4,Billetera digital,189,189,3213.0
+2026,11,Nov,3,2,Tarjeta de débito,174,174,2630.88

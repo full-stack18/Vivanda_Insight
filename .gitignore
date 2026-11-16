@@ -4,3 +4,11 @@
 *.tfplan
 *.tfvars
 *.tfvars.json
+
+**/.venv/
+**/target/
+**/logs/
+**/dbt_packages/
+**/.env
+**/__pycache__/
+*.py[cod]

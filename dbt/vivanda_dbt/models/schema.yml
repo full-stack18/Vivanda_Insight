@@ -1,0 +1,84 @@
+version: 2
+
+models:
+  - name: dim_fecha
+    columns:
+      - name: FECHA_KEY
+        data_tests:
+          - unique
+          - not_null
+      - name: FECHA
+        data_tests:
+          - unique
+          - not_null
+
+  - name: fact_detalle_venta
+    columns:
+      - name: ID_DETALLE
+        data_tests:
+          - unique
+          - not_null
+      - name: ID_VENTA
+        data_tests:
+          - not_null
+      - name: TOTAL_LINEA
+        data_tests:
+          - not_null
+      - name: FECHA_KEY
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: FECHA_KEY
+  - name: fact_venta
+    columns:
+      - name: ID_VENTA
+        data_tests:
+          - unique
+          - not_null
+      - name: TOTAL
+        data_tests:
+          - not_null
+      - name: FECHA_KEY
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: FECHA_KEY
+  - name: fact_pago
+    columns:
+      - name: ID_PAGO
+        data_tests:
+          - unique
+          - not_null
+      - name: MONTO
+        data_tests:
+          - not_null
+      - name: FECHA_KEY
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: FECHA_KEY
+  - name: fact_movimiento_inventario
+    columns:
+      - name: ID_MOVIMIENTO
+        data_tests:
+          - unique
+          - not_null
+      - name: CANTIDAD
+        data_tests:
+          - not_null
+      - name: CANTIDAD_NETA
+        data_tests:
+          - not_null
+      - name: FECHA_KEY
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: FECHA_KEY

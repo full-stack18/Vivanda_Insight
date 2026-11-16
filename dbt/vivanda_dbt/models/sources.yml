@@ -1,0 +1,20 @@
+version: 2
+
+sources:
+  - name: vivanda_bronze
+    database: VIVANDA_DW
+    schema: BRONZE
+    tables:
+      - name: ALMACEN
+      - name: CATEGORIA
+      - name: CLIENTE
+      - name: DETALLE_VENTA
+      - name: EMPLEADO
+      - name: INVENTARIO
+      - name: METODO_PAGO
+      - name: MOVIMIENTO_INVENTARIO
+      - name: PAGO
+      - name: PRODUCTO
+      - name: PROVEEDOR
+      - name: SEDE
+      - name: VENTA
