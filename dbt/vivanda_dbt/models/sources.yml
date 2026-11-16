@@ -8,6 +8,8 @@ sources:
       - name: ALMACEN
       - name: CATEGORIA
       - name: CLIENTE
+      - name: COMPRA
+      - name: DETALLE_COMPRA
       - name: DETALLE_VENTA
       - name: EMPLEADO
       - name: INVENTARIO

@@ -16,6 +16,12 @@ WITH fechas AS (
     SELECT CAST("fecha" AS DATE)
     FROM {{ ref('stg_movimiento_inventario') }}
     WHERE "fecha" IS NOT NULL
+
+    UNION
+
+    SELECT CAST("fecha" AS DATE)
+    FROM {{ ref('stg_compra') }}
+    WHERE "fecha" IS NOT NULL
 )
 
 SELECT

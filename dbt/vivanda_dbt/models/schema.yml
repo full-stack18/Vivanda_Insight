@@ -82,3 +82,71 @@ models:
               arguments:
                 to: ref('dim_fecha')
                 field: FECHA_KEY
+  - name: dim_proveedor
+    columns:
+      - name: ID_PROVEEDOR
+        data_tests:
+          - unique
+          - not_null
+
+  - name: fact_compra
+    columns:
+      - name: ID_DETALLE
+        data_tests:
+          - unique
+          - not_null
+      - name: ID_COMPRA
+        data_tests:
+          - not_null
+      - name: ID_SEDE
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_sede')
+                field: ID_SEDE
+      - name: ID_ALMACEN
+        data_tests:
+          - quoted_relationships:
+              arguments:
+                to: ref('dim_almacen')
+                field: id_almacen
+      - name: ID_PROVEEDOR
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_proveedor')
+                field: ID_PROVEEDOR
+      - name: ID_EMPLEADO
+        data_tests:
+          - quoted_relationships:
+              arguments:
+                to: ref('dim_empleado')
+                field: id_empleado
+      - name: ID_PRODUCTO
+        data_tests:
+          - not_null
+          - quoted_relationships:
+              arguments:
+                to: ref('dim_producto')
+                field: id_producto
+      - name: FECHA_KEY
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: FECHA_KEY
+      - name: TOTAL_LINEA
+        data_tests:
+          - not_null
+
+  - name: mart_compras_mensuales
+    columns:
+      - name: NUMERO_COMPRAS
+        data_tests:
+          - not_null
+      - name: TOTAL_COMPRADO
+        data_tests:
+          - not_null

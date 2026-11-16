@@ -116,6 +116,21 @@ df_pagos = cargar_mart_opcional(
     ],
 )
 
+df_compras = cargar_mart_opcional(
+    "mart_compras_mensuales.csv",
+    [
+        "ANIO", "MES_NUMERO", "MES", "ID_SEDE", "SEDE",
+        "ID_ALMACEN", "ALMACEN", "ID_PROVEEDOR", "PROVEEDOR",
+        "ESTADO_COMPRA", "NUMERO_COMPRAS", "UNIDADES_COMPRADAS",
+        "TOTAL_COMPRADO",
+    ],
+    [
+        "ANIO", "MES_NUMERO", "ID_SEDE", "ID_ALMACEN",
+        "ID_PROVEEDOR", "NUMERO_COMPRAS", "UNIDADES_COMPRADAS",
+        "TOTAL_COMPRADO",
+    ],
+)
+
 # DuckDB consulta los datos localmente, sin conectarse a Snowflake.
 conexion = duckdb.connect(":memory:")
 conexion.register("datos_csv", df)
@@ -180,6 +195,7 @@ def filtrar_mart(datos_mart):
 
 datos_productos = filtrar_mart(df_productos)
 datos_pagos = filtrar_mart(df_pagos)
+datos_compras = filtrar_mart(df_compras)
 
 conexion.register("datos_filtrados", datos)
 conexion.execute(
@@ -203,6 +219,14 @@ if not datos_pagos.empty:
         "SELECT * FROM datos_pagos_filtrados"
     )
     tablas_permitidas.add("pagos_filtrados")
+    
+if not datos_compras.empty:
+    conexion.register("datos_compras_filtrados", datos_compras)
+    conexion.execute(
+        "CREATE OR REPLACE TEMP TABLE compras_filtradas AS "
+        "SELECT * FROM datos_compras_filtrados"
+    )
+    tablas_permitidas.add("compras_filtradas")
 
 registros, numero_ventas, ventas_netas, descuentos = conexion.execute(
     """
@@ -314,13 +338,13 @@ def mostrar_grafico_monetario(
 
 
 
-
-
-
-
-
-
-tabs = st.tabs(["📊 Resumen", "🛒 Productos", "💳 Pagos", "🤖 Asistente IA"])
+tabs = st.tabs([
+    "📊 Resumen",
+    "🛒 Productos",
+    "💳 Pagos",
+    "📦 Compras",
+    "🤖 Asistente IA",
+])
 
 with tabs[0]:
     col1, col2, col3, col4 = st.columns(4)
@@ -550,6 +574,43 @@ with tabs[2]:
         )
 
 with tabs[3]:
+    st.subheader("📦 Compras a proveedores")
+
+    if not datos_compras.empty:
+        total_comprado = datos_compras["TOTAL_COMPRADO"].sum()
+        numero_compras = datos_compras["NUMERO_COMPRAS"].sum()
+        unidades_compradas = datos_compras["UNIDADES_COMPRADAS"].sum()
+
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Compras registradas", f"{numero_compras:,.0f}")
+        col2.metric("Unidades compradas", f"{unidades_compradas:,.0f}")
+        col3.metric("Monto comprado", f"S/ {total_comprado:,.2f}")
+
+        resumen_proveedores = (
+            datos_compras.groupby("PROVEEDOR", as_index=False)
+            .agg(TOTAL_COMPRADO=("TOTAL_COMPRADO", "sum"))
+            .sort_values("TOTAL_COMPRADO", ascending=False)
+        )
+
+        mostrar_grafico_monetario(
+            resumen_proveedores,
+            "PROVEEDOR",
+            "TOTAL_COMPRADO",
+            "Proveedor",
+            "Monto comprado por proveedor",
+            "#6EA982",
+            300,
+        )
+
+        with st.expander("Ver detalle de compras"):
+            st.dataframe(datos_compras, use_container_width=True)
+    else:
+        st.info(
+            "Aún no está disponible el resumen de compras. "
+            "Se generará cuando se ejecute el orquestador actualizado."
+        )
+
+with tabs[4]:
     st.divider()
     st.subheader("💬 Pregunta sobre tus ventas")
 
@@ -588,6 +649,15 @@ with tabs[3]:
     if "pagos_filtrados" in tablas_permitidas:
         preguntas_rapidas.append(
             ("💳 Métodos de pago", "¿Cuánto se pagó por cada método de pago?")
+        )
+    
+    if "compras_filtradas" in tablas_permitidas:
+        preguntas_rapidas.extend(
+            [
+                ("🏭 Compras por proveedor", "¿Cuánto se compró a cada proveedor?"),
+                ("📦 Compras por sede", "¿Cuánto se compró en cada sede?"),
+                ("📅 Compras por mes", "¿Cuál fue el total comprado por mes?"),
+            ]
         )
 
     columnas_preguntas = st.columns(2)
@@ -653,6 +723,21 @@ with tabs[3]:
                 "GROUP BY METODO_PAGO\n"
                 "ORDER BY TOTAL_PAGADO DESC"
             )
+        
+        if "compras_filtradas" in tablas_permitidas:
+            tablas_y_columnas.append(
+                "compras_filtradas: ANIO, MES_NUMERO, MES, ID_SEDE, SEDE, "
+                "ID_ALMACEN, ALMACEN, ID_PROVEEDOR, PROVEEDOR, ESTADO_COMPRA, "
+                "NUMERO_COMPRAS, UNIDADES_COMPRADAS, TOTAL_COMPRADO. "
+                "Una fila por mes, sede, almacén, proveedor y estado."
+            )
+            ejemplos_sql.append(
+                "Ejemplo de total comprado por proveedor:\\n"
+                "SELECT PROVEEDOR, SUM(TOTAL_COMPRADO) AS TOTAL_COMPRADO\\n"
+                "FROM compras_filtradas\\n"
+                "GROUP BY PROVEEDOR\\n"
+                "ORDER BY TOTAL_COMPRADO DESC"
+            )
 
         sede_contexto = (
             "todas las sedes"
@@ -682,6 +767,12 @@ with tabs[3]:
             and "product" in ultimas_preguntas[0]
             and "productos_filtrados" in tablas_permitidas
         )
+        
+        pide_compras_anuladas = bool(
+            "compras_filtradas" in tablas_permitidas
+            and re.search(r"\b(anulad\w*|cancelad\w*)\b", pregunta.lower())
+            and re.search(r"\b(compra\w*|pedido\w*)\b", pregunta.lower())
+        )
 
         instrucciones = f"""
         Eres un asistente que analiza indicadores de ventas de Vivanda.
@@ -709,12 +800,19 @@ with tabs[3]:
 
         {("Para productos o categorías, usa productos_filtrados, suma VENTAS_NETAS y agrupa por PRODUCTO o CATEGORIA. Para unidades, suma UNIDADES_VENDIDAS." if "productos_filtrados" in tablas_permitidas else "")}
         {("Para pagos, usa pagos_filtrados y suma TOTAL_PAGADO por METODO_PAGO." if "pagos_filtrados" in tablas_permitidas else "")}
-
+        {("Para compras, usa compras_filtradas. Suma TOTAL_COMPRADO para los montos y NUMERO_COMPRAS para contar compras. Agrupa por PROVEEDOR, SEDE, ALMACEN, ESTADO_COMPRA o por ANIO, MES_NUMERO y MES, según la pregunta." if "compras_filtradas" in tablas_permitidas else "")}
         {chr(10).join(ejemplos_sql)}
         """
 
         try:
-            if pide_segundo_producto:
+            if pide_compras_anuladas:
+                consulta = (
+                    "SELECT COALESCE(SUM(NUMERO_COMPRAS), 0) "
+                    "AS NUMERO_COMPRAS_ANULADAS "
+                    "FROM compras_filtradas "
+                    "WHERE UPPER(TRIM(ESTADO_COMPRA)) = 'ANULADA'" 
+                )
+            elif pide_segundo_producto:
                 consulta = (
                     "SELECT PRODUCTO, SUM(VENTAS_NETAS) AS VENTAS_NETAS "
                     "FROM productos_filtrados GROUP BY PRODUCTO "
@@ -807,8 +905,13 @@ with tabs[3]:
                 elif resultado.shape == (1, 1):
                     nombre_columna = resultado.columns[0].upper()
                     valor = resultado.iloc[0, 0]
-
-                    if "NUMERO_VENTAS" in nombre_columna:
+                    
+                    if "NUMERO_COMPRAS_ANULADAS" in nombre_columna:
+                        texto = (
+                            f"Hay **{float(valor):,.0f} compras anuladas** "
+                            f"{contexto_respuesta}."
+                        )
+                    elif "NUMERO_VENTAS" in nombre_columna:
                         texto = (
                             f"El resumen de {contexto_respuesta} registra "
                             f"**{float(valor):,.0f} ventas**."

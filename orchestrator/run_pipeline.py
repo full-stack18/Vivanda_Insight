@@ -53,11 +53,34 @@ MART_EXPORTS = [
         ],
         "order_by": "ANIO, MES_NUMERO, ID_SEDE, TOTAL_PAGADO DESC",
     },
+    
+    {
+        "table": "VIVANDA_DW.GOLD.MART_COMPRAS_MENSUALES",
+        "file": "mart_compras_mensuales.csv",
+        "columns": [
+            "ANIO",
+            "MES_NUMERO",
+            "MES",
+            "ID_SEDE",
+            "SEDE",
+            "ID_ALMACEN",
+            "ALMACEN",
+            "ID_PROVEEDOR",
+            "PROVEEDOR",
+            "ESTADO_COMPRA",
+            "NUMERO_COMPRAS",
+            "UNIDADES_COMPRADAS",
+            "TOTAL_COMPRADO",
+        ],
+        "order_by": "ANIO, MES_NUMERO, ID_SEDE, PROVEEDOR, TOTAL_COMPRADO DESC",
+    },
 ]
 
-# Se extraen las mismas 13 tablas que ya consume Bronze.
+# Se extraen las mismas 15 tablas que ya consume Bronze.
 TABLE_FILES = [
     "almacen.csv",
+    "compra.csv",
+    "detalle_compra.csv",
     "categoria.csv",
     "cliente.csv",
     "detalle_venta.csv",
@@ -83,12 +106,22 @@ EXPORT_COLUMNS = {
         "precio_unitario",
         "descuento",
     ),
+    
+    "detalle_compra": (
+    "id_detalle",
+    "id_compra",
+    "id_producto",
+    "cantidad",
+    "costo_unitario",
+    ),
 }
 
 STAGING_MODELS = [
     "stg_almacen",
     "stg_categoria",
     "stg_cliente",
+    "stg_compra",
+    "stg_detalle_compra",
     "stg_detalle_venta",
     "stg_empleado",
     "stg_inventario",
@@ -335,8 +368,10 @@ def refresh_insight_marts_only():
             DBT_EXE,
             "run",
             "--select",
+            "mart_ventas_mensuales",
             "mart_ventas_productos",
             "mart_pagos_metodo",
+            "mart_compras_mensuales",
         ],
         cwd=DBT_DIR,
         env=env,
@@ -390,7 +425,7 @@ def main():
             )
 
         run_step(
-            "Recargando las 13 tablas Bronze",
+            "Recargando las 15 tablas Bronze",
             [DBT_EXE, "run-operation", "load_bronze_from_s3"],
             cwd=DBT_DIR,
             env=env,

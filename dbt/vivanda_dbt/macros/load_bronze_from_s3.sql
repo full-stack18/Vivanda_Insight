@@ -3,6 +3,8 @@
     'ALMACEN',
     'CATEGORIA',
     'CLIENTE',
+    'COMPRA',
+    'DETALLE_COMPRA',
     'DETALLE_VENTA',
     'EMPLEADO',
     'INVENTARIO',
