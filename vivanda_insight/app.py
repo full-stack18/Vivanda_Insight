@@ -1102,6 +1102,44 @@ with tabs[4]:
                         f"**S/ {float(fila_lider[columna_total]):,.2f}**. "
                         f"El top disponible es: {destacados}."
                     )
+                elif (
+                    "TOTAL_COMPRADO" in resultado.columns
+                    and (
+                        "PROVEEDOR" in resultado.columns
+                        or "SEDE" in resultado.columns
+                    )
+                ):
+                    dimension = (
+                        "PROVEEDOR"
+                        if "PROVEEDOR" in resultado.columns
+                        else "SEDE"
+                    )
+                    ranking = resultado.assign(
+                        _MONTO=pd.to_numeric(
+                            resultado["TOTAL_COMPRADO"], errors="coerce"
+                        )
+                    ).dropna(subset=["_MONTO"]).sort_values(
+                        "_MONTO", ascending=False
+                    )
+
+                    if not ranking.empty:
+                        lider = ranking.iloc[0]
+                        entidad = (
+                            "El proveedor"
+                            if dimension == "PROVEEDOR"
+                            else "La sede"
+                        )
+                        texto = (
+                            f"{entidad} con mayor monto de compras "
+                            f"{contexto_respuesta} fue **{lider[dimension]}**, "
+                            f"con **S/ {float(lider['_MONTO']):,.2f}**. "
+                            f"La tabla muestra los {len(ranking)} resultados."
+                        )
+                    else:
+                        texto = (
+                            f"No pude interpretar los montos de compras "
+                            f"{contexto_respuesta}."
+                        )
                 elif len(resultado.columns) == 1:
                     nombre_columna = resultado.columns[0].replace("_", " ").lower()
                     valores = resultado.iloc[:, 0].dropna().astype(str).tolist()

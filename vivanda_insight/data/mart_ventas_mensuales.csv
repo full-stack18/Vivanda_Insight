@@ -1,40 +1,40 @@
 ﻿ANIO,MES_NUMERO,MES,ID_SEDE,SEDE,NUMERO_VENTAS,SUBTOTAL_VENTAS,DESCUENTOS,VENTAS_NETAS
-2025,11,Nov,1,Vivanda Sede Lima 1 - simulada,1962,40478.0,1060.14,39417.86
-2025,11,Nov,2,Vivanda Sede Lima 2 - simulada,2073,42735.0,1125.08,41609.92
-2025,11,Nov,3,Vivanda Sede Lima 3 - simulada,1981,40758.0,1079.13,39678.87
-2025,12,Dec,1,Vivanda Sede Lima 1 - simulada,2779,57308.8,1514.28,55794.52
-2025,12,Dec,2,Vivanda Sede Lima 2 - simulada,2883,59569.2,1562.7,58006.5
-2025,12,Dec,3,Vivanda Sede Lima 3 - simulada,2892,60168.4,1559.83,58608.57
-2026,1,Jan,1,Vivanda Sede Lima 1 - simulada,2862,59057.5,1547.11,57510.39
-2026,1,Jan,2,Vivanda Sede Lima 2 - simulada,2786,57166.6,1501.35,55665.25
-2026,1,Jan,3,Vivanda Sede Lima 3 - simulada,2901,59470.6,1571.44,57899.16
-2026,2,Feb,1,Vivanda Sede Lima 1 - simulada,2593,53426.6,1398.1,52028.5
-2026,2,Feb,2,Vivanda Sede Lima 2 - simulada,2630,54373.0,1434.35,52938.65
-2026,2,Feb,3,Vivanda Sede Lima 3 - simulada,2495,50979.4,1352.97,49626.43
-2026,3,Mar,1,Vivanda Sede Lima 1 - simulada,2852,58749.4,1545.76,57203.64
-2026,3,Mar,2,Vivanda Sede Lima 2 - simulada,2826,58375.6,1524.53,56851.07
-2026,3,Mar,3,Vivanda Sede Lima 3 - simulada,2779,57785.0,1496.02,56288.98
-2026,4,Apr,1,Vivanda Sede Lima 1 - simulada,2754,56706.9,1494.27,55212.63
-2026,4,Apr,2,Vivanda Sede Lima 2 - simulada,2733,56176.1,1477.15,54698.95
-2026,4,Apr,3,Vivanda Sede Lima 3 - simulada,2820,58253.8,1511.08,56742.72
-2026,5,May,1,Vivanda Sede Lima 1 - simulada,2825,58230.3,1530.87,56699.43
-2026,5,May,2,Vivanda Sede Lima 2 - simulada,2825,58433.0,1542.77,56890.23
-2026,5,May,3,Vivanda Sede Lima 3 - simulada,2767,56884.7,1494.45,55390.25
-2026,6,Jun,1,Vivanda Sede Lima 1 - simulada,2761,57019.5,1502.29,55517.21
-2026,6,Jun,2,Vivanda Sede Lima 2 - simulada,2757,56926.3,1502.19,55424.11
-2026,6,Jun,3,Vivanda Sede Lima 3 - simulada,2782,57350.7,1512.44,55838.26
-2026,7,Jul,1,Vivanda Sede Lima 1 - simulada,2728,56282.7,1483.61,54799.09
-2026,7,Jul,2,Vivanda Sede Lima 2 - simulada,2778,57365.4,1483.74,55881.66
-2026,7,Jul,3,Vivanda Sede Lima 3 - simulada,2843,58632.2,1552.36,57079.84
-2026,8,Aug,1,Vivanda Sede Lima 1 - simulada,2830,58317.7,1544.77,56772.93
-2026,8,Aug,2,Vivanda Sede Lima 2 - simulada,2892,59476.3,1565.55,57910.75
-2026,8,Aug,3,Vivanda Sede Lima 3 - simulada,2821,58163.0,1540.21,56622.79
-2026,9,Sep,1,Vivanda Sede Lima 1 - simulada,2869,59283.9,1555.57,57728.33
-2026,9,Sep,2,Vivanda Sede Lima 2 - simulada,2661,55099.4,1455.48,53643.92
-2026,9,Sep,3,Vivanda Sede Lima 3 - simulada,2693,55517.5,1478.92,54038.58
-2026,10,Oct,1,Vivanda Sede Lima 1 - simulada,2815,58118.0,1524.8,56593.2
-2026,10,Oct,2,Vivanda Sede Lima 2 - simulada,2800,57755.3,1527.27,56228.03
-2026,10,Oct,3,Vivanda Sede Lima 3 - simulada,2832,58520.1,1541.07,56979.03
-2026,11,Nov,1,Vivanda Sede Lima 1 - simulada,704,14532.0,381.94,14150.06
-2026,11,Nov,2,Vivanda Sede Lima 2 - simulada,689,14040.6,380.65,13659.95
-2026,11,Nov,3,Vivanda Sede Lima 3 - simulada,727,15011.1,393.0,14618.1
+2025,11,Nov,1,Vivanda San Isidro,1962,40478.0,1060.14,39417.86
+2025,11,Nov,2,Vivanda Miraflores,2073,42735.0,1125.08,41609.92
+2025,11,Nov,3,Vivanda Santiago de Surco,1981,40758.0,1079.13,39678.87
+2025,12,Dec,1,Vivanda San Isidro,2779,57308.8,1514.28,55794.52
+2025,12,Dec,2,Vivanda Miraflores,2883,59569.2,1562.7,58006.5
+2025,12,Dec,3,Vivanda Santiago de Surco,2892,60168.4,1559.83,58608.57
+2026,1,Jan,1,Vivanda San Isidro,2862,59057.5,1547.11,57510.39
+2026,1,Jan,2,Vivanda Miraflores,2786,57166.6,1501.35,55665.25
+2026,1,Jan,3,Vivanda Santiago de Surco,2901,59470.6,1571.44,57899.16
+2026,2,Feb,1,Vivanda San Isidro,2593,53426.6,1398.1,52028.5
+2026,2,Feb,2,Vivanda Miraflores,2630,54373.0,1434.35,52938.65
+2026,2,Feb,3,Vivanda Santiago de Surco,2495,50979.4,1352.97,49626.43
+2026,3,Mar,1,Vivanda San Isidro,2852,58749.4,1545.76,57203.64
+2026,3,Mar,2,Vivanda Miraflores,2826,58375.6,1524.53,56851.07
+2026,3,Mar,3,Vivanda Santiago de Surco,2779,57785.0,1496.02,56288.98
+2026,4,Apr,1,Vivanda San Isidro,2754,56706.9,1494.27,55212.63
+2026,4,Apr,2,Vivanda Miraflores,2733,56176.1,1477.15,54698.95
+2026,4,Apr,3,Vivanda Santiago de Surco,2820,58253.8,1511.08,56742.72
+2026,5,May,1,Vivanda San Isidro,2825,58230.3,1530.87,56699.43
+2026,5,May,2,Vivanda Miraflores,2825,58433.0,1542.77,56890.23
+2026,5,May,3,Vivanda Santiago de Surco,2767,56884.7,1494.45,55390.25
+2026,6,Jun,1,Vivanda San Isidro,2761,57019.5,1502.29,55517.21
+2026,6,Jun,2,Vivanda Miraflores,2757,56926.3,1502.19,55424.11
+2026,6,Jun,3,Vivanda Santiago de Surco,2782,57350.7,1512.44,55838.26
+2026,7,Jul,1,Vivanda San Isidro,2728,56282.7,1483.61,54799.09
+2026,7,Jul,2,Vivanda Miraflores,2778,57365.4,1483.74,55881.66
+2026,7,Jul,3,Vivanda Santiago de Surco,2843,58632.2,1552.36,57079.84
+2026,8,Aug,1,Vivanda San Isidro,2830,58317.7,1544.77,56772.93
+2026,8,Aug,2,Vivanda Miraflores,2892,59476.3,1565.55,57910.75
+2026,8,Aug,3,Vivanda Santiago de Surco,2821,58163.0,1540.21,56622.79
+2026,9,Sep,1,Vivanda San Isidro,2869,59283.9,1555.57,57728.33
+2026,9,Sep,2,Vivanda Miraflores,2661,55099.4,1455.48,53643.92
+2026,9,Sep,3,Vivanda Santiago de Surco,2693,55517.5,1478.92,54038.58
+2026,10,Oct,1,Vivanda San Isidro,2815,58118.0,1524.8,56593.2
+2026,10,Oct,2,Vivanda Miraflores,2800,57755.3,1527.27,56228.03
+2026,10,Oct,3,Vivanda Santiago de Surco,2832,58520.1,1541.07,56979.03
+2026,11,Nov,1,Vivanda San Isidro,704,14532.0,381.94,14150.06
+2026,11,Nov,2,Vivanda Miraflores,689,14040.6,380.65,13659.95
+2026,11,Nov,3,Vivanda Santiago de Surco,727,15011.1,393.0,14618.1
