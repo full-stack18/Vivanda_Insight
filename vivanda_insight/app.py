@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 import re
 import requests
+import unicodedata
 from theme import aplicar_marca_vivanda
 
 
@@ -18,8 +19,8 @@ st.set_page_config(
 aplicar_marca_vivanda()
 
 st.info(
-    "Demo académica con datos simulados de ventas, productos y pagos. "
-    "Pregunta por sedes, periodos, categorías, productos o métodos de pago. "
+    "Demo académica con datos simulados de ventas, inventario, productos, compras y pagos. "
+    "Pregunta por sedes, periodos, categorías, productos, stock, compras o métodos de pago. "
     "El asistente consulta los datos localmente con Ollama y DuckDB."
 )
 
@@ -63,6 +64,28 @@ columnas_numericas = [
 
 for columna in columnas_numericas:
     df[columna] = pd.to_numeric(df[columna], errors="coerce").fillna(0)
+
+
+def normalizar_texto_busqueda(texto):
+    texto = unicodedata.normalize("NFKD", str(texto).lower())
+    texto = "".join(
+        caracter for caracter in texto
+        if not unicodedata.combining(caracter)
+    )
+    return re.sub(r"[^a-z0-9]+", "", texto)
+
+
+def formatear_cantidad(valor):
+    numero = pd.to_numeric(valor, errors="coerce")
+    if pd.isna(numero):
+        return "0"
+
+    numero = float(numero)
+    if abs(numero - round(numero)) < 0.0005:
+        return f"{int(round(numero)):,}".replace(",", ".")
+
+    texto = f"{numero:,.3f}".rstrip("0").rstrip(".")
+    return texto.replace(",", "X").replace(".", ",").replace("X", ".")
 
 
 def cargar_mart_opcional(nombre_archivo, columnas_requeridas, columnas_numericas):
@@ -113,6 +136,19 @@ df_pagos = cargar_mart_opcional(
     [
         "ANIO", "MES_NUMERO", "ID_SEDE", "ID_METODO_PAGO",
         "NUMERO_PAGOS", "NUMERO_VENTAS", "TOTAL_PAGADO",
+    ],
+)
+
+df_inventario = cargar_mart_opcional(
+    "mart_inventario_actual.csv",
+    [
+        "ID_INVENTARIO", "ID_PRODUCTO", "SKU", "PRODUCTO", "ID_CATEGORIA",
+        "CATEGORIA", "ID_ALMACEN", "ALMACEN", "ID_SEDE", "SEDE",
+        "STOCK_ACTUAL", "STOCK_MINIMO", "ESTADO_STOCK", "ACTUALIZADO_EN",
+    ],
+    [
+        "ID_INVENTARIO", "ID_PRODUCTO", "ID_CATEGORIA", "ID_ALMACEN",
+        "ID_SEDE", "STOCK_ACTUAL", "STOCK_MINIMO",
     ],
 )
 
@@ -196,6 +232,12 @@ def filtrar_mart(datos_mart):
 datos_productos = filtrar_mart(df_productos)
 datos_pagos = filtrar_mart(df_pagos)
 datos_compras = filtrar_mart(df_compras)
+datos_inventario = df_inventario.copy()
+if not datos_inventario.empty and id_sede_elegida is not None:
+    datos_inventario = datos_inventario[
+        pd.to_numeric(datos_inventario["ID_SEDE"], errors="coerce")
+        == id_sede_elegida
+    ].copy()
 
 conexion.register("datos_filtrados", datos)
 conexion.execute(
@@ -227,6 +269,14 @@ if not datos_compras.empty:
         "SELECT * FROM datos_compras_filtrados"
     )
     tablas_permitidas.add("compras_filtradas")
+
+if not datos_inventario.empty:
+    conexion.register("datos_inventario_filtrados", datos_inventario)
+    conexion.execute(
+        "CREATE OR REPLACE TEMP TABLE inventario_filtrado AS "
+        "SELECT * FROM datos_inventario_filtrados"
+    )
+    tablas_permitidas.add("inventario_filtrado")
 
 registros, numero_ventas, ventas_netas, descuentos = conexion.execute(
     """
@@ -343,6 +393,7 @@ tabs = st.tabs([
     "🛒 Productos",
     "💳 Pagos",
     "📦 Compras",
+    "📊 Inventario",
     "🤖 Asistente IA",
 ])
 
@@ -515,6 +566,12 @@ with tabs[1]:
             .sum()
             .sort_values("VENTAS_NETAS", ascending=False)
         )
+        resumen_unidades = (
+            datos_productos.groupby("PRODUCTO", as_index=False)["UNIDADES_VENDIDAS"]
+            .sum()
+            .nlargest(10, "UNIDADES_VENDIDAS")
+            .sort_values("UNIDADES_VENDIDAS", ascending=False)
+        )
 
         col_productos, col_categorias = st.columns(2)
         with col_productos:
@@ -537,6 +594,50 @@ with tabs[1]:
                 "#E98982",
                 300,
             )
+        grafico_unidades = (
+            alt.Chart(resumen_unidades)
+            .mark_bar(color="#78C6A3", cornerRadiusEnd=3)
+            .encode(
+                x=alt.X(
+                    "UNIDADES_VENDIDAS:Q",
+                    title="Unidades vendidas",
+                    axis=alt.Axis(format=",.0f"),
+                ),
+                y=alt.Y(
+                    "PRODUCTO:N",
+                    title="Producto",
+                    sort=alt.SortField(
+                        field="UNIDADES_VENDIDAS", order="descending"
+                    ),
+                    axis=alt.Axis(labelLimit=260),
+                ),
+                tooltip=[
+                    alt.Tooltip("PRODUCTO:N", title="Producto"),
+                    alt.Tooltip(
+                        "UNIDADES_VENDIDAS:Q",
+                        title="Unidades vendidas",
+                        format=",.0f",
+                    ),
+                ],
+            )
+            .properties(
+                height=max(280, len(resumen_unidades) * 34),
+                title="10 productos líderes por unidades vendidas",
+            )
+            .configure_view(strokeOpacity=0)
+            .configure_axis(
+                gridColor="#343A46",
+                labelColor="#E6EAF0",
+                titleColor="#E6EAF0",
+                domainColor="#525866",
+            )
+            .configure_title(color="#F4F6F8", anchor="start", fontSize=14)
+        )
+        st.altair_chart(grafico_unidades, use_container_width=True)
+        st.caption(
+            "Este ranking se ordena por cantidad de unidades. Los gráficos superiores "
+            "se ordenan por ventas netas en soles. Todos respetan los filtros de sede, año y mes."
+        )
         with st.expander("Ver detalle de productos"):
             st.dataframe(datos_productos, use_container_width=True)
     else:
@@ -611,8 +712,66 @@ with tabs[3]:
         )
 
 with tabs[4]:
+    st.subheader("📊 Stock actual por producto y almacén")
+    if not datos_inventario.empty:
+        unidades_disponibles = float(datos_inventario["STOCK_ACTUAL"].sum())
+        productos_en_stock = datos_inventario["ID_PRODUCTO"].nunique()
+        registros_reposicion = int(
+            (datos_inventario["ESTADO_STOCK"].astype(str) == "REPOSICION").sum()
+        )
+        col_stock, col_productos_stock, col_reposicion = st.columns(3)
+        col_stock.metric("Unidades disponibles", f"{unidades_disponibles:,.0f}")
+        col_productos_stock.metric("Productos con inventario", f"{productos_en_stock:,}")
+        col_reposicion.metric("Registros para reposición", f"{registros_reposicion:,}")
+
+        stock_por_producto = (
+            datos_inventario.groupby("PRODUCTO", as_index=False)
+            .agg(STOCK_ACTUAL=("STOCK_ACTUAL", "sum"))
+            .sort_values("STOCK_ACTUAL", ascending=True)
+        )
+        grafico_stock = (
+            alt.Chart(stock_por_producto)
+            .mark_bar(color="#83BD91")
+            .encode(
+                x=alt.X("STOCK_ACTUAL:Q", title="Unidades disponibles"),
+                y=alt.Y(
+                    "PRODUCTO:N",
+                    title=None,
+                    sort=alt.SortField(field="STOCK_ACTUAL", order="ascending"),
+                    axis=alt.Axis(labelLimit=240),
+                ),
+                tooltip=[
+                    alt.Tooltip("PRODUCTO:N", title="Producto"),
+                    alt.Tooltip("STOCK_ACTUAL:Q", title="Unidades", format=",.3f"),
+                ],
+            )
+            .properties(height=max(300, min(600, len(stock_por_producto) * 24)))
+            .configure_view(strokeOpacity=0)
+            .configure_axis(
+                gridColor="#343A46",
+                labelColor="#E6EAF0",
+                titleColor="#E6EAF0",
+                domainColor="#525866",
+            )
+        )
+        st.altair_chart(grafico_stock, use_container_width=True)
+        st.caption(
+            "El inventario refleja el último estado cargado por el orquestador. "
+            "Los filtros de año y mes de ventas no alteran este snapshot."
+        )
+        st.dataframe(
+            datos_inventario.sort_values(["PRODUCTO", "ALMACEN"]),
+            use_container_width=True,
+        )
+    else:
+        st.info(
+            "Aún no está disponible el mart de inventario. "
+            "Se generará en la próxima actualización del orquestador."
+        )
+
+with tabs[5]:
     st.divider()
-    st.subheader("💬 Pregunta sobre tus ventas")
+    st.subheader("💬 Pregunta sobre ventas e inventario")
 
     if "historial_vivanda" not in st.session_state:
         st.session_state.historial_vivanda = []
@@ -651,6 +810,11 @@ with tabs[4]:
             ("💳 Métodos de pago", "¿Cuánto se pagó por cada método de pago?")
         )
     
+    if "inventario_filtrado" in tablas_permitidas:
+        preguntas_rapidas.append(
+            ("📦 Stock de detergente", "¿Cuál es el stock del producto Detergente 1 kg?")
+        )
+
     if "compras_filtradas" in tablas_permitidas:
         preguntas_rapidas.extend(
             [
@@ -724,6 +888,18 @@ with tabs[4]:
                 "ORDER BY TOTAL_PAGADO DESC"
             )
         
+        if "inventario_filtrado" in tablas_permitidas:
+            tablas_y_columnas.append(
+                "inventario_filtrado: ID_PRODUCTO, SKU, PRODUCTO, CATEGORIA, "
+                "ID_ALMACEN, ALMACEN, ID_SEDE, SEDE, STOCK_ACTUAL, "
+                "STOCK_MINIMO, ESTADO_STOCK, ACTUALIZADO_EN. Una fila por "
+                "producto y almacén; representa el último snapshot cargado."
+            )
+            ejemplos_sql.append(
+                "Para stock, consulta inventario_filtrado y muestra el stock "
+                "por almacén; ignora los filtros temporales de año y mes."
+            )
+
         if "compras_filtradas" in tablas_permitidas:
             tablas_y_columnas.append(
                 "compras_filtradas: ANIO, MES_NUMERO, MES, ID_SEDE, SEDE, "
@@ -768,6 +944,114 @@ with tabs[4]:
             and "productos_filtrados" in tablas_permitidas
         )
         
+        pide_stock = bool(
+            re.search(
+                r"\b(stock|inventario|existencias|disponibilidad|reposici[oó]n|reponer)\b|cu[aá]ntas unidades quedan",
+                pregunta,
+                flags=re.IGNORECASE,
+            )
+            and "inventario_filtrado" in tablas_permitidas
+        )
+        pregunta_normalizada = normalizar_texto_busqueda(pregunta)
+        pregunta_sin_acentos = unicodedata.normalize("NFKD", pregunta.lower())
+        pregunta_sin_acentos = "".join(
+            caracter for caracter in pregunta_sin_acentos
+            if not unicodedata.combining(caracter)
+        )
+        pregunta_tokenizada = re.sub(r"[^a-z0-9]+", " ", pregunta_sin_acentos).strip()
+        palabras_pregunta = {
+            palabra for palabra in pregunta_tokenizada.split()
+            if len(palabra) >= 4
+        }
+        producto_stock = None
+        if pide_stock and not datos_inventario.empty:
+            catalogo_stock = datos_inventario[
+                ["ID_PRODUCTO", "SKU", "PRODUCTO"]
+            ].drop_duplicates("ID_PRODUCTO")
+            coincidencias_producto = []
+            for fila_producto in catalogo_stock.itertuples(index=False):
+                nombre_normalizado = normalizar_texto_busqueda(fila_producto.PRODUCTO)
+                sku_normalizado = normalizar_texto_busqueda(fila_producto.SKU)
+                tokens_producto = {
+                    palabra for palabra in re.findall(r"[a-z0-9]+", nombre_normalizado)
+                    if len(palabra) >= 4
+                }
+                if (
+                    nombre_normalizado
+                    and nombre_normalizado in pregunta_normalizada
+                ) or (sku_normalizado and sku_normalizado in pregunta_normalizada):
+                    coincidencias_producto.append((fila_producto, len(tokens_producto) + 10))
+                else:
+                    coincidencia_tokens = len(tokens_producto & palabras_pregunta)
+                    if coincidencia_tokens:
+                        coincidencias_producto.append((fila_producto, coincidencia_tokens))
+            if coincidencias_producto:
+                mejor_puntaje = max(puntaje for _, puntaje in coincidencias_producto)
+                mejores_coincidencias = [
+                    fila for fila, puntaje in coincidencias_producto
+                    if puntaje == mejor_puntaje
+                ]
+                if len(mejores_coincidencias) == 1:
+                    producto_stock = mejores_coincidencias[0]
+
+        sede_stock_id = None
+        if pide_stock and not datos_inventario.empty:
+            for _, fila_sede in datos_inventario[["ID_SEDE", "SEDE", "ALMACEN"]].drop_duplicates("ID_SEDE").iterrows():
+                tokens_sede = set()
+                for nombre in [fila_sede.get("SEDE"), fila_sede.get("ALMACEN")]:
+                    nombre_sin_acentos = unicodedata.normalize("NFKD", str(nombre).lower())
+                    nombre_sin_acentos = "".join(
+                        caracter for caracter in nombre_sin_acentos
+                        if not unicodedata.combining(caracter)
+                    )
+                    tokens_sede.update(re.findall(r"[a-z0-9]+", nombre_sin_acentos))
+                tokens_sede -= {"vivanda", "almacen", "de"}
+                if tokens_sede & palabras_pregunta:
+                    sede_stock_id = int(fila_sede["ID_SEDE"])
+                    break
+
+        palabras_mes = {
+            "enero": 1, "febrero": 2, "marzo": 3, "abril": 4,
+            "mayo": 5, "junio": 6, "julio": 7, "agosto": 8,
+            "septiembre": 9, "setiembre": 9, "octubre": 10,
+            "noviembre": 11, "diciembre": 12,
+        }
+        mes_pedido = next(
+            (numero for nombre, numero in palabras_mes.items()
+             if re.search(rf"\b{nombre}\b", pregunta_tokenizada)),
+            None,
+        )
+        pide_ventas_sede_mes = bool(
+            mes_pedido
+            and re.search(r"\b(sede|tienda|local)\b", pregunta_tokenizada)
+            and re.search(r"\b(venta|ventas|vendio|vendieron|mayor|mas|lider)\b", pregunta_tokenizada)
+            and "ventas_filtradas" in tablas_permitidas
+        )
+        pide_top_unidades = bool(
+            re.search(r"\b(unidades|unidad)\b", pregunta_tokenizada)
+            and re.search(r"\b(producto|productos|vendieron|vendido|vendidos|mas)\b", pregunta_tokenizada)
+            and "productos_filtrados" in tablas_permitidas
+        )
+        pide_top_unidades_por_anio = bool(
+            pide_top_unidades
+            and anio_elegido == "Todos"
+            and mes_elegido != "Todos"
+        )
+        pide_pago_mas_transacciones = bool(
+            re.search(r"\b(metodo|pago|pagos)\b", pregunta_tokenizada)
+            and re.search(r"\b(mas|mayor|concentro|utilizado|frecuente|numero|cantidad)\b", pregunta_tokenizada)
+            and "pagos_filtrados" in tablas_permitidas
+        )
+        pide_compras_y_pendientes = bool(
+            "compras_filtradas" in tablas_permitidas
+            and re.search(r"\b(proveedor|proveedores)\b", pregunta_tokenizada)
+            and re.search(r"\b(pendiente|pendientes)\b", pregunta_tokenizada)
+        )
+        pide_reposicion = bool(
+            pide_stock
+            and re.search(r"\b(reposici[oó]n|reponer|reabastecer|bajo el m[ií]nimo)\b", pregunta, re.IGNORECASE)
+        )
+
         pide_compras_anuladas = bool(
             "compras_filtradas" in tablas_permitidas
             and re.search(r"\b(anulad\w*|cancelad\w*)\b", pregunta.lower())
@@ -801,6 +1085,7 @@ with tabs[4]:
         {("Para productos o categorías, usa productos_filtrados, suma VENTAS_NETAS y agrupa por PRODUCTO o CATEGORIA. Para unidades, suma UNIDADES_VENDIDAS." if "productos_filtrados" in tablas_permitidas else "")}
         {("Para pagos, usa pagos_filtrados y suma TOTAL_PAGADO por METODO_PAGO." if "pagos_filtrados" in tablas_permitidas else "")}
         {("Para compras, usa compras_filtradas. Suma TOTAL_COMPRADO para los montos y NUMERO_COMPRAS para contar compras. Agrupa por PROVEEDOR, SEDE, ALMACEN, ESTADO_COMPRA o por ANIO, MES_NUMERO y MES, según la pregunta." if "compras_filtradas" in tablas_permitidas else "")}
+        {("Para stock, consulta inventario_filtrado. Es un snapshot vigente a la última carga, ignora filtros de año y mes y responde STOCK_ACTUAL por almacén. No infieras stock sumando movimientos." if "inventario_filtrado" in tablas_permitidas else "")}
         {chr(10).join(ejemplos_sql)}
         """
 
@@ -812,11 +1097,83 @@ with tabs[4]:
                     "FROM compras_filtradas "
                     "WHERE UPPER(TRIM(ESTADO_COMPRA)) = 'ANULADA'" 
                 )
+            elif pide_reposicion:
+                consulta = (
+                    "SELECT SKU, PRODUCTO, ALMACEN, SEDE, STOCK_ACTUAL, "
+                    "STOCK_MINIMO, ESTADO_STOCK, ACTUALIZADO_EN "
+                    "FROM inventario_filtrado "
+                    "WHERE STOCK_ACTUAL <= STOCK_MINIMO "
+                    "ORDER BY PRODUCTO, ALMACEN"
+                )
+            elif producto_stock is not None:
+                condiciones_stock = [
+                    f"ID_PRODUCTO = {int(producto_stock.ID_PRODUCTO)}"
+                ]
+                if sede_stock_id is not None:
+                    condiciones_stock.append(f"ID_SEDE = {sede_stock_id}")
+                consulta = (
+                    "SELECT SKU, PRODUCTO, ALMACEN, SEDE, STOCK_ACTUAL, "
+                    "STOCK_MINIMO, ESTADO_STOCK, ACTUALIZADO_EN "
+                    "FROM inventario_filtrado "
+                    f"WHERE {' AND '.join(condiciones_stock)} "
+                    "ORDER BY ALMACEN"
+                )
+            elif pide_stock:
+                condiciones_stock = (
+                    [f"ID_SEDE = {sede_stock_id}"] if sede_stock_id is not None else []
+                )
+                filtro_stock = (
+                    f" WHERE {' AND '.join(condiciones_stock)}"
+                    if condiciones_stock else ""
+                )
+                consulta = (
+                    "SELECT SKU, PRODUCTO, ALMACEN, SEDE, STOCK_ACTUAL, "
+                    "STOCK_MINIMO, ESTADO_STOCK, ACTUALIZADO_EN "
+                    "FROM inventario_filtrado" + filtro_stock + " ORDER BY PRODUCTO, ALMACEN"
+                )
             elif pide_segundo_producto:
                 consulta = (
                     "SELECT PRODUCTO, SUM(VENTAS_NETAS) AS VENTAS_NETAS "
                     "FROM productos_filtrados GROUP BY PRODUCTO "
                     "ORDER BY VENTAS_NETAS DESC LIMIT 1 OFFSET 1"
+                )
+            elif pide_ventas_sede_mes:
+                consulta = (
+                    "SELECT ANIO, SEDE, SUM(VENTAS_NETAS) AS VENTAS_NETAS "
+                    "FROM ventas_filtradas "
+                    f"WHERE MES_NUMERO = {int(mes_pedido)} "
+                    "GROUP BY ANIO, SEDE ORDER BY ANIO, VENTAS_NETAS DESC"
+                )
+            elif pide_top_unidades:
+                if pide_top_unidades_por_anio:
+                    consulta = (
+                        "SELECT ANIO, PRODUCTO, "
+                        "SUM(UNIDADES_VENDIDAS) AS UNIDADES_VENDIDAS "
+                        "FROM productos_filtrados GROUP BY ANIO, PRODUCTO "
+                        "QUALIFY ROW_NUMBER() OVER (PARTITION BY ANIO "
+                        "ORDER BY SUM(UNIDADES_VENDIDAS) DESC) <= 3 "
+                        "ORDER BY ANIO, UNIDADES_VENDIDAS DESC"
+                    )
+                else:
+                    consulta = (
+                        "SELECT PRODUCTO, SUM(UNIDADES_VENDIDAS) AS UNIDADES_VENDIDAS "
+                        "FROM productos_filtrados GROUP BY PRODUCTO "
+                        "ORDER BY UNIDADES_VENDIDAS DESC LIMIT 10"
+                    )
+            elif pide_compras_y_pendientes:
+                consulta = (
+                    "SELECT PROVEEDOR, SUM(TOTAL_COMPRADO) AS TOTAL_COMPRADO, "
+                    "SUM(NUMERO_COMPRAS) AS NUMERO_COMPRAS, "
+                    "SUM(CASE WHEN UPPER(TRIM(ESTADO_COMPRA)) = 'PENDIENTE' "
+                    "THEN NUMERO_COMPRAS ELSE 0 END) AS COMPRAS_PENDIENTES "
+                    "FROM compras_filtradas GROUP BY PROVEEDOR "
+                    "ORDER BY TOTAL_COMPRADO DESC"
+                )
+            elif pide_pago_mas_transacciones:
+                consulta = (
+                    "SELECT METODO_PAGO, SUM(NUMERO_PAGOS) AS NUMERO_PAGOS "
+                    "FROM pagos_filtrados GROUP BY METODO_PAGO "
+                    "ORDER BY NUMERO_PAGOS DESC LIMIT 1"
                 )
             else:
                 historial_previo = [
@@ -852,7 +1209,7 @@ with tabs[4]:
                 texto = (
                     f"No puedo responder eso con los datos disponibles {contexto_respuesta}. "
                     "Puedo ayudarte con ventas, descuentos, sedes, periodos, "
-                    "productos, categorías y métodos de pago."
+                    "productos, categorías, métodos de pago, compras e inventario actual."
                 )
                 filas = None
                 consulta_segura = None
@@ -897,10 +1254,184 @@ with tabs[4]:
                 resultado = conexion.execute(consulta).df()
                 filas = resultado.to_dict(orient="records")
                 consulta_segura = consulta
-                if resultado.empty:
+                if resultado.empty and pide_reposicion:
+                    texto = (
+                        "✅ No hay productos por debajo o en su stock mínimo "
+                        f"{contexto_respuesta}. No se identifican reposiciones pendientes "
+                        "en el último snapshot de inventario."
+                    )
+                elif resultado.empty and pide_stock:
+                    producto_solicitado = (
+                        f" para **{producto_stock.PRODUCTO}**"
+                        if producto_stock is not None
+                        else ""
+                    )
+                    sede_stock = (
+                        f" en {sede_elegida}"
+                        if sede_elegida != "Todas"
+                        else " en las sedes disponibles"
+                    )
+                    texto = (
+                        f"No encontré registros de inventario{producto_solicitado}"
+                        f"{sede_stock}. El stock refleja la última carga disponible."
+                    )
+                elif resultado.empty:
                     texto = (
                         f"No encontré resultados {contexto_respuesta}. "
                         "Prueba ampliando los filtros de sede, año o mes."
+                    )
+                elif pide_reposicion and "STOCK_ACTUAL" in resultado.columns:
+                    detalle_reposicion = "\n".join(
+                        f"- **{fila['PRODUCTO']}** — {fila['ALMACEN']} ({fila['SEDE']}): "
+                        f"{formatear_cantidad(fila['STOCK_ACTUAL'])} unidades "
+                        f"(mínimo: {formatear_cantidad(fila['STOCK_MINIMO'])})."
+                        for _, fila in resultado.iterrows()
+                    )
+                    texto = (
+                        f"Encontré **{len(resultado)} registro(s) que requieren revisión "
+                        f"de reposición** {contexto_respuesta}:\n\n{detalle_reposicion}"
+                    )
+                elif pide_stock and "STOCK_ACTUAL" in resultado.columns:
+                    if producto_stock is None:
+                        stock_por_producto = (
+                            resultado.groupby("PRODUCTO", as_index=False)["STOCK_ACTUAL"]
+                            .sum()
+                            .sort_values("STOCK_ACTUAL", ascending=False)
+                        )
+                        detalle_stock = "; ".join(
+                            f"{fila['PRODUCTO']}: {formatear_cantidad(fila['STOCK_ACTUAL'])} unidades"
+                            for _, fila in stock_por_producto.head(5).iterrows()
+                        )
+                        total_unidades = pd.to_numeric(
+                            resultado["STOCK_ACTUAL"], errors="coerce"
+                        ).fillna(0).sum()
+                        alcance_stock = (
+                            f"en **{resultado['SEDE'].iloc[0]}**"
+                            if resultado["SEDE"].nunique() == 1
+                            else "en las sedes disponibles"
+                        )
+                        texto = (
+                            f"No indicaste un producto específico. El inventario suma "
+                            f"**{formatear_cantidad(total_unidades)} unidades** {alcance_stock}, "
+                            f"distribuidas en **{resultado['PRODUCTO'].nunique()} productos**. "
+                            f"Entre los mayores stocks por producto están: {detalle_stock}."
+                        )
+                    else:
+                        unidades = pd.to_numeric(
+                            resultado["STOCK_ACTUAL"], errors="coerce"
+                        ).fillna(0)
+                        minimos = pd.to_numeric(
+                            resultado["STOCK_MINIMO"], errors="coerce"
+                        ).fillna(0)
+                        stock_total = float(unidades.sum())
+                        nombre_producto = str(resultado.iloc[0]["PRODUCTO"])
+                        sedes_producto = (
+                            resultado["SEDE"].dropna().astype(str).unique().tolist()
+                            if "SEDE" in resultado.columns
+                            else []
+                        )
+                        detalle_almacenes = "\n".join(
+                            f"- **{fila['ALMACEN']}**"
+                            + (f" ({fila['SEDE']})" if pd.notna(fila.get("SEDE")) else "")
+                            + f": {formatear_cantidad(fila['STOCK_ACTUAL'])} unidades "
+                            + f"(mínimo: {formatear_cantidad(fila['STOCK_MINIMO'])})."
+                            for _, fila in resultado.iterrows()
+                        )
+                        debajo_minimo = unidades <= minimos
+                        if debajo_minimo.any():
+                            filas_reposicion = resultado.loc[debajo_minimo]
+                            detalle_reposicion = "; ".join(
+                                f"{fila['ALMACEN']} ({formatear_cantidad(fila['STOCK_ACTUAL'])} "
+                                f"unidades; mínimo {formatear_cantidad(fila['STOCK_MINIMO'])})"
+                                for _, fila in filas_reposicion.iterrows()
+                            )
+                            estado_stock = (
+                                f"⚠️ Conviene revisar la reposición en: {detalle_reposicion}."
+                            )
+                        else:
+                            estado_stock = (
+                                "✅ El stock está por encima del mínimo configurado "
+                                "en todos los almacenes consultados."
+                            )
+
+                        ultima_actualizacion = pd.to_datetime(
+                            resultado.get("ACTUALIZADO_EN"), errors="coerce", utc=True
+                        ).max()
+                        fecha_actualizacion = (
+                            ultima_actualizacion.strftime("%d/%m/%Y")
+                            if pd.notna(ultima_actualizacion)
+                            else None
+                        )
+                        if len(sedes_producto) == 1:
+                            alcance = f"en **{sedes_producto[0]}**"
+                        else:
+                            alcance = f"entre **{len(sedes_producto)} sedes**"
+
+                        texto = (
+                            f"**{nombre_producto}** tiene **{formatear_cantidad(stock_total)} "
+                            f"unidades disponibles** {alcance}.\n\n"
+                            "**Detalle por almacén:**\n"
+                            f"{detalle_almacenes}\n\n"
+                            f"{estado_stock}"
+                        )
+                        if fecha_actualizacion:
+                            texto += f"\n\nDatos actualizados el **{fecha_actualizacion}**."
+                elif pide_ventas_sede_mes and "ANIO" in resultado.columns:
+                    lideres = (
+                        resultado.sort_values("VENTAS_NETAS", ascending=False)
+                        .drop_duplicates("ANIO")
+                        .sort_values("ANIO")
+                    )
+                    nombre_mes = next(
+                        nombre.capitalize() for nombre, numero in palabras_mes.items()
+                        if numero == mes_pedido
+                    )
+                    if len(lideres) == 1:
+                        fila_lider = lideres.iloc[0]
+                        texto = (
+                            f"En **{nombre_mes} de {int(fila_lider['ANIO'])}**, la sede con "
+                            f"mayores ventas netas fue **{fila_lider['SEDE']}**, con "
+                            f"**S/ {float(fila_lider['VENTAS_NETAS']):,.2f}**."
+                        )
+                    else:
+                        detalle_lideres = "; ".join(
+                            f"{int(fila['ANIO'])}: **{fila['SEDE']}** "
+                            f"(S/ {float(fila['VENTAS_NETAS']):,.2f})"
+                            for _, fila in lideres.iterrows()
+                        )
+                        texto = (
+                            f"Para **{nombre_mes}**, la sede líder cambia según el año: "
+                            f"{detalle_lideres}. Como no indicaste año, incluyo cada año disponible."
+                        )
+                elif (
+                    "METODO_PAGO" in resultado.columns
+                    and "NUMERO_PAGOS" in resultado.columns
+                ):
+                    fila_lider = resultado.iloc[0]
+                    texto = (
+                        f"**{fila_lider['METODO_PAGO']}** concentró más pagos, con "
+                        f"**{float(fila_lider['NUMERO_PAGOS']):,.0f} transacciones** "
+                        f"{contexto_respuesta}."
+                    )
+                elif (
+                    "PROVEEDOR" in resultado.columns
+                    and "COMPRAS_PENDIENTES" in resultado.columns
+                ):
+                    pendientes = pd.to_numeric(
+                        resultado["COMPRAS_PENDIENTES"], errors="coerce"
+                    ).fillna(0).sum()
+                    monto_total = pd.to_numeric(
+                        resultado["TOTAL_COMPRADO"], errors="coerce"
+                    ).fillna(0).sum()
+                    detalle_proveedores = "; ".join(
+                        f"**{fila['PROVEEDOR']}**: S/ {float(fila['TOTAL_COMPRADO']):,.2f} "
+                        f"({float(fila['COMPRAS_PENDIENTES']):,.0f} pendientes)"
+                        for _, fila in resultado.iterrows()
+                    )
+                    texto = (
+                        f"El monto registrado por proveedor suma **S/ {monto_total:,.2f}** y "
+                        f"hay **{pendientes:,.0f} compras pendientes** {contexto_respuesta}.\n\n"
+                        f"Detalle: {detalle_proveedores}."
                     )
                 elif resultado.shape == (1, 1):
                     nombre_columna = resultado.columns[0].upper()
@@ -1011,6 +1542,47 @@ with tabs[4]:
                             f"**S/ {float(fila[columna_ventas]):,.2f}**."
                         )
                     
+                elif (
+                    "PRODUCTO" in resultado.columns
+                    and "UNIDADES_VENDIDAS" in resultado.columns
+                ):
+                    top_unidades = resultado.copy()
+                    top_unidades["UNIDADES_VENDIDAS"] = pd.to_numeric(
+                        top_unidades["UNIDADES_VENDIDAS"], errors="coerce"
+                    ).fillna(0)
+                    if pide_top_unidades_por_anio and "ANIO" in top_unidades.columns:
+                        detalle_anual = []
+                        for anio, grupo in top_unidades.groupby("ANIO", sort=True):
+                            lider = grupo.iloc[0]
+                            top_del_anio = "; ".join(
+                                f"{fila['PRODUCTO']} ({float(fila['UNIDADES_VENDIDAS']):,.0f})"
+                                for _, fila in grupo.iterrows()
+                            )
+                            detalle_anual.append(
+                                f"- **{mes_elegido} de {int(anio)}**: líder **{lider['PRODUCTO']}** "
+                                f"con **{float(lider['UNIDADES_VENDIDAS']):,.0f} unidades**. "
+                                f"Top del año: {top_del_anio}."
+                            )
+                        texto = (
+                            "Como el filtro de año está en **Todos**, comparé el mes "
+                            "seleccionado por separado en cada año, sin mezclar periodos:\n\n"
+                            + "\n".join(detalle_anual)
+                            + "\n\nEste ranking cuenta unidades vendidas; el gráfico de Productos "
+                            "se ordena por ventas netas en soles, por eso sus líderes pueden diferir."
+                        )
+                    else:
+                        lider_unidades = top_unidades.iloc[0]
+                        detalle_unidades = "; ".join(
+                            f"**{fila['PRODUCTO']}** ({float(fila['UNIDADES_VENDIDAS']):,.0f})"
+                            for _, fila in top_unidades.head(3).iterrows()
+                        )
+                        texto = (
+                            f"El producto con más unidades vendidas {contexto_respuesta} fue "
+                            f"**{lider_unidades['PRODUCTO']}**, con "
+                            f"**{float(lider_unidades['UNIDADES_VENDIDAS']):,.0f} unidades**. "
+                            f"El top disponible es: {detalle_unidades}. "
+                            "Este ranking cuenta unidades vendidas, no el monto en soles."
+                        )
                 elif (
                     "PRODUCTO" in resultado.columns
                     and any("VENTAS_NETAS" in columna.upper() for columna in resultado.columns)

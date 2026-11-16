@@ -1,0 +1,73 @@
+﻿ID_INVENTARIO,ID_PRODUCTO,SKU,PRODUCTO,ID_CATEGORIA,CATEGORIA,ID_ALMACEN,ALMACEN,ID_SEDE,SEDE,STOCK_ACTUAL,STOCK_MINIMO,ESTADO_STOCK,ACTUALIZADO_EN
+13,1,AB003,Aceite vegetal 1 L,1,Abarrotes,2,Almacén Miraflores,2,Vivanda Miraflores,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+1,1,AB003,Aceite vegetal 1 L,1,Abarrotes,1,Almacén San Isidro,1,Vivanda San Isidro,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+25,1,AB003,Aceite vegetal 1 L,1,Abarrotes,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+52,16,BE005,Agua con gas 1 L,2,Bebidas,2,Almacén Miraflores,2,Vivanda Miraflores,71.0,15.0,DISPONIBLE,2026-11-16T18:08:03.440881
+40,16,BE005,Agua con gas 1 L,2,Bebidas,1,Almacén San Isidro,1,Vivanda San Isidro,68.0,15.0,DISPONIBLE,2026-11-16T18:08:03.440881
+64,16,BE005,Agua con gas 1 L,2,Bebidas,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,74.0,15.0,DISPONIBLE,2026-11-16T18:08:03.440881
+18,6,BE001,Agua sin gas 1 L,2,Bebidas,2,Almacén Miraflores,2,Vivanda Miraflores,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+6,6,BE001,Agua sin gas 1 L,2,Bebidas,1,Almacén San Isidro,1,Vivanda San Isidro,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+30,6,BE001,Agua sin gas 1 L,2,Bebidas,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+15,3,AB001,Arroz extra 1 kg,1,Abarrotes,2,Almacén Miraflores,2,Vivanda Miraflores,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+3,3,AB001,Arroz extra 1 kg,1,Abarrotes,1,Almacén San Isidro,1,Vivanda San Isidro,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+27,3,AB001,Arroz extra 1 kg,1,Abarrotes,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+14,2,AB002,Azúcar rubia 1 kg,1,Abarrotes,2,Almacén Miraflores,2,Vivanda Miraflores,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+2,2,AB002,Azúcar rubia 1 kg,1,Abarrotes,1,Almacén San Isidro,1,Vivanda San Isidro,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+26,2,AB002,Azúcar rubia 1 kg,1,Abarrotes,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+59,23,CP002,Champú 400 ml,6,Cuidado personal,2,Almacén Miraflores,2,Vivanda Miraflores,39.0,8.0,DISPONIBLE,2026-11-16T05:02:56.112663
+47,23,CP002,Champú 400 ml,6,Cuidado personal,1,Almacén San Isidro,1,Vivanda San Isidro,36.0,8.0,DISPONIBLE,2026-11-16T05:02:56.112663
+71,23,CP002,Champú 400 ml,6,Cuidado personal,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,42.0,8.0,DISPONIBLE,2026-11-16T05:02:56.112663
+22,10,LI001,Detergente 1 kg,4,Limpieza,2,Almacén Miraflores,2,Vivanda Miraflores,101.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+10,10,LI001,Detergente 1 kg,4,Limpieza,1,Almacén San Isidro,1,Vivanda San Isidro,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+34,10,LI001,Detergente 1 kg,4,Limpieza,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,101.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+49,13,AB004,Fideos spaghetti 500 g,1,Abarrotes,2,Almacén Miraflores,2,Vivanda Miraflores,89.0,14.0,DISPONIBLE,2026-11-16T18:08:03.440881
+37,13,AB004,Fideos spaghetti 500 g,1,Abarrotes,1,Almacén San Isidro,1,Vivanda San Isidro,86.0,14.0,DISPONIBLE,2026-11-16T18:08:03.440881
+61,13,AB004,Fideos spaghetti 500 g,1,Abarrotes,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,92.0,14.0,DISPONIBLE,2026-11-16T18:08:03.440881
+16,4,BE003,Gaseosa familiar 2 L,2,Bebidas,2,Almacén Miraflores,2,Vivanda Miraflores,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+4,4,BE003,Gaseosa familiar 2 L,2,Bebidas,1,Almacén San Isidro,1,Vivanda San Isidro,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+28,4,BE003,Gaseosa familiar 2 L,2,Bebidas,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+24,12,CP001,Jabón de tocador,6,Cuidado personal,2,Almacén Miraflores,2,Vivanda Miraflores,101.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+12,12,CP001,Jabón de tocador,6,Cuidado personal,1,Almacén San Isidro,1,Vivanda San Isidro,101.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+36,12,CP001,Jabón de tocador,6,Cuidado personal,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,101.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+17,5,BE002,Jugo de naranja 1 L,2,Bebidas,2,Almacén Miraflores,2,Vivanda Miraflores,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+5,5,BE002,Jugo de naranja 1 L,2,Bebidas,1,Almacén San Isidro,1,Vivanda San Isidro,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+29,5,BE002,Jugo de naranja 1 L,2,Bebidas,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+21,9,LI002,Lavavajilla 750 ml,4,Limpieza,2,Almacén Miraflores,2,Vivanda Miraflores,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+9,9,LI002,Lavavajilla 750 ml,4,Limpieza,1,Almacén San Isidro,1,Vivanda San Isidro,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+33,9,LI002,Lavavajilla 750 ml,4,Limpieza,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+20,8,LA001,Leche evaporada,3,Lácteos,2,Almacén Miraflores,2,Vivanda Miraflores,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+8,8,LA001,Leche evaporada,3,Lácteos,1,Almacén San Isidro,1,Vivanda San Isidro,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+32,8,LA001,Leche evaporada,3,Lácteos,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+55,19,LI003,Lejía 1 L,4,Limpieza,2,Almacén Miraflores,2,Vivanda Miraflores,51.0,12.0,DISPONIBLE,2026-11-16T05:02:56.112663
+43,19,LI003,Lejía 1 L,4,Limpieza,1,Almacén San Isidro,1,Vivanda San Isidro,48.0,12.0,DISPONIBLE,2026-11-16T05:02:56.112663
+67,19,LI003,Lejía 1 L,4,Limpieza,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,54.0,12.0,DISPONIBLE,2026-11-16T05:02:56.112663
+50,14,AB005,Lentejas 500 g,1,Abarrotes,2,Almacén Miraflores,2,Vivanda Miraflores,61.0,12.0,DISPONIBLE,2026-11-16T18:08:03.440881
+38,14,AB005,Lentejas 500 g,1,Abarrotes,1,Almacén San Isidro,1,Vivanda San Isidro,58.0,12.0,DISPONIBLE,2026-11-16T18:08:03.440881
+62,14,AB005,Lentejas 500 g,1,Abarrotes,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,64.0,12.0,DISPONIBLE,2026-11-16T18:08:03.440881
+54,18,LA004,Mantequilla 200 g,3,Lácteos,2,Almacén Miraflores,2,Vivanda Miraflores,31.0,8.0,DISPONIBLE,2026-11-16T05:02:56.112663
+42,18,LA004,Mantequilla 200 g,3,Lácteos,1,Almacén San Isidro,1,Vivanda San Isidro,28.0,8.0,DISPONIBLE,2026-11-16T05:02:56.112663
+66,18,LA004,Mantequilla 200 g,3,Lácteos,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,34.0,8.0,DISPONIBLE,2026-11-16T05:02:56.112663
+23,11,FV001,Manzana,5,Frutas y verduras,2,Almacén Miraflores,2,Vivanda Miraflores,101.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+11,11,FV001,Manzana,5,Frutas y verduras,1,Almacén San Isidro,1,Vivanda San Isidro,101.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+35,11,FV001,Manzana,5,Frutas y verduras,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,101.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+51,15,BE004,Néctar de durazno 1 L,2,Bebidas,2,Almacén Miraflores,2,Vivanda Miraflores,47.0,12.0,DISPONIBLE,2026-11-16T18:08:03.440881
+39,15,BE004,Néctar de durazno 1 L,2,Bebidas,1,Almacén San Isidro,1,Vivanda San Isidro,44.0,12.0,DISPONIBLE,2026-11-16T18:08:03.440881
+63,15,BE004,Néctar de durazno 1 L,2,Bebidas,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,50.0,12.0,DISPONIBLE,2026-11-16T18:08:03.440881
+56,20,LI004,Papel higiénico pack x 4,4,Limpieza,2,Almacén Miraflores,2,Vivanda Miraflores,58.0,12.0,DISPONIBLE,2026-11-16T05:02:56.112663
+44,20,LI004,Papel higiénico pack x 4,4,Limpieza,1,Almacén San Isidro,1,Vivanda San Isidro,55.0,12.0,DISPONIBLE,2026-11-16T05:02:56.112663
+68,20,LI004,Papel higiénico pack x 4,4,Limpieza,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,61.0,12.0,DISPONIBLE,2026-11-16T05:02:56.112663
+60,24,CP003,Pasta dental 90 g,6,Cuidado personal,2,Almacén Miraflores,2,Vivanda Miraflores,45.0,10.0,DISPONIBLE,2026-11-16T05:02:56.112663
+48,24,CP003,Pasta dental 90 g,6,Cuidado personal,1,Almacén San Isidro,1,Vivanda San Isidro,42.0,10.0,DISPONIBLE,2026-11-16T05:02:56.112663
+72,24,CP003,Pasta dental 90 g,6,Cuidado personal,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,48.0,10.0,DISPONIBLE,2026-11-16T05:02:56.112663
+57,21,FV002,Plátano de seda,5,Frutas y verduras,2,Almacén Miraflores,2,Vivanda Miraflores,41.0,12.0,DISPONIBLE,2026-11-16T05:02:56.112663
+45,21,FV002,Plátano de seda,5,Frutas y verduras,1,Almacén San Isidro,1,Vivanda San Isidro,38.0,12.0,DISPONIBLE,2026-11-16T05:02:56.112663
+69,21,FV002,Plátano de seda,5,Frutas y verduras,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,44.0,12.0,DISPONIBLE,2026-11-16T05:02:56.112663
+53,17,LA003,Queso fresco 500 g,3,Lácteos,2,Almacén Miraflores,2,Vivanda Miraflores,35.0,10.0,DISPONIBLE,2026-11-16T05:02:56.112663
+41,17,LA003,Queso fresco 500 g,3,Lácteos,1,Almacén San Isidro,1,Vivanda San Isidro,32.0,10.0,DISPONIBLE,2026-11-16T05:02:56.112663
+65,17,LA003,Queso fresco 500 g,3,Lácteos,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,38.0,10.0,DISPONIBLE,2026-11-16T05:02:56.112663
+58,22,FV003,Tomate,5,Frutas y verduras,2,Almacén Miraflores,2,Vivanda Miraflores,33.0,10.0,DISPONIBLE,2026-11-16T05:02:56.112663
+46,22,FV003,Tomate,5,Frutas y verduras,1,Almacén San Isidro,1,Vivanda San Isidro,30.0,10.0,DISPONIBLE,2026-11-16T05:02:56.112663
+70,22,FV003,Tomate,5,Frutas y verduras,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,36.0,10.0,DISPONIBLE,2026-11-16T05:02:56.112663
+19,7,LA002,Yogur natural 1 L,3,Lácteos,2,Almacén Miraflores,2,Vivanda Miraflores,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+7,7,LA002,Yogur natural 1 L,3,Lácteos,1,Almacén San Isidro,1,Vivanda San Isidro,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274
+31,7,LA002,Yogur natural 1 L,3,Lácteos,3,Almacén Santiago de Surco,3,Vivanda Santiago de Surco,100.0,10.0,DISPONIBLE,2026-11-08T19:11:13.668274

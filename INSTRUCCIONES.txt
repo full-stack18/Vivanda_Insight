@@ -1,0 +1,11 @@
+ACTUALIZACION DE INVENTARIO PARA VIVANDA INSIGHT
+
+Este paquete se generó usando los app.py y run_pipeline.py que compartiste.
+Extrae las carpetas dentro de la carpeta raíz Proyecto4_Vivanda y acepta
+reemplazar app.py y run_pipeline.py. Se añade un único modelo dbt nuevo.
+
+Después, reanuda VIVANDA_WH y ejecuta desde la raíz:
+py -3.11 orchestrator\run_pipeline.py --refresh-insight-marts
+
+El comando materializa los marts de la app (incluido inventario actual) y
+exporta los CSV. Luego reinicia Vivanda Insight.

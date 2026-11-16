@@ -55,6 +55,17 @@ MART_EXPORTS = [
     },
     
     {
+        "table": "VIVANDA_DW.GOLD.MART_INVENTARIO_ACTUAL",
+        "file": "mart_inventario_actual.csv",
+        "columns": [
+            "ID_INVENTARIO", "ID_PRODUCTO", "SKU", "PRODUCTO",
+            "ID_CATEGORIA", "CATEGORIA", "ID_ALMACEN", "ALMACEN",
+            "ID_SEDE", "SEDE", "STOCK_ACTUAL", "STOCK_MINIMO",
+            "ESTADO_STOCK", "ACTUALIZADO_EN",
+        ],
+        "order_by": "PRODUCTO, ALMACEN",
+    },
+    {
         "table": "VIVANDA_DW.GOLD.MART_COMPRAS_MENSUALES",
         "file": "mart_compras_mensuales.csv",
         "columns": [
@@ -372,6 +383,7 @@ def refresh_insight_marts_only():
             "mart_ventas_productos",
             "mart_pagos_metodo",
             "mart_compras_mensuales",
+            "mart_inventario_actual",
         ],
         cwd=DBT_DIR,
         env=env,
